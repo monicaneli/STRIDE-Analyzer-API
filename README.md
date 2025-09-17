@@ -1,5 +1,5 @@
 
-# STRIDE-Analyzer-API
+# STRIDE Analyzer API
 
 > API para análise automática de ameaças em arquiteturas de sistemas, utilizando Python, FastAPI, Azure OpenAI (GPT-4) e visualização com Cytoscape.js no frontend.
 
@@ -103,8 +103,6 @@ STRIDE-Analyzer-API/
 │
 ├───frontend/
 │       index.html
-│
-└─── AV/  # Ambiente virtual (não versionar)
 ```
 
 ---
@@ -112,7 +110,6 @@ STRIDE-Analyzer-API/
 ## Observações
 - Certifique-se de que as credenciais Azure OpenAI estejam corretas.
 - O modelo precisa ser compatível com entrada de imagem.
-- O ambiente virtual não deve ser versionado (adicione ao .gitignore).
 - Para dúvidas, consulte a documentação oficial do [FastAPI](https://fastapi.tiangolo.com/) e [Azure OpenAI](https://learn.microsoft.com/pt-br/azure/ai-services/openai/).
 
 ---
