@@ -1,24 +1,3 @@
-## Exemplos de Interface e Arquitetura
-
-<div align="center">
-	<img src="interface/interface1.png" alt="Interface 1" width="45%" style="display:inline-block; margin-right:10px;"/>
-	<img src="interface/interface2.png" alt="Interface 2" width="45%" style="display:inline-block;"/>
-</div>
-
-<p align="center"><i>Exemplo da interface web lado a lado</i></p>
-
----
-
-### Exemplo de Arquitetura
-
-<div align="center">
-	<img src="imagens/arquitetura1.png" alt="Exemplo de Arquitetura" width="60%"/>
-</div>
-
-<p align="center"><i>Exemplo de imagem de arquitetura utilizada na análise</i></p>
-
----
-
 # STRIDE Analyzer API
 
 > API para análise automática de ameaças em arquiteturas de sistemas, utilizando Python, FastAPI, Azure OpenAI (GPT-4) e visualização com Cytoscape.js no frontend.
@@ -131,6 +110,25 @@ STRIDE-Analyzer-API/
 - Certifique-se de que as credenciais Azure OpenAI estejam corretas.
 - O modelo precisa ser compatível com entrada de imagem.
 - Para dúvidas, consulte a documentação oficial do [FastAPI](https://fastapi.tiangolo.com/) e [Azure OpenAI](https://learn.microsoft.com/pt-br/azure/ai-services/openai/).
+
+## Exemplos de Interface e Arquitetura
+
+<div align="center">
+	<img src="https://github.com/monicaneli/STRIDE-Analyzer-API/blob/55b6d1baa2fb85590b036a722f660ce0eec8a2cd/interface/Formulario.JPG" alt="Interface 1" width="45%" style="display:inline-block; margin-right:10px;"/>
+	<img src="https://github.com/monicaneli/STRIDE-Analyzer-API/blob/55b6d1baa2fb85590b036a722f660ce0eec8a2cd/interface/Resposta.JPG" alt="Interface 2" width="45%" style="display:inline-block;"/>
+</div>
+
+<p align="center"><i>Exemplo da interface web da aplicação</i></p>
+
+---
+
+### Exemplo de Arquitetura
+
+<div align="center">
+	<img src="https://github.com/monicaneli/STRIDE-Analyzer-API/blob/55b6d1baa2fb85590b036a722f660ce0eec8a2cd/imagens/arquitetura1.JPG" alt="Exemplo de Arquitetura" width="60%"/>
+</div>
+
+<p align="center"><i>Exemplo de uma imagem de arquitetura utilizada na análise</i></p>
 
 ---
 
