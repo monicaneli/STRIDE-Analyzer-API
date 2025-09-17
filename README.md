@@ -1,3 +1,23 @@
+## Exemplos de Interface e Arquitetura
+
+<div align="center">
+	<img src="interface/interface1.png" alt="Interface 1" width="45%" style="display:inline-block; margin-right:10px;"/>
+	<img src="interface/interface2.png" alt="Interface 2" width="45%" style="display:inline-block;"/>
+</div>
+
+<p align="center"><i>Exemplo da interface web lado a lado</i></p>
+
+---
+
+### Exemplo de Arquitetura
+
+<div align="center">
+	<img src="imagens/arquitetura1.png" alt="Exemplo de Arquitetura" width="60%"/>
+</div>
+
+<p align="center"><i>Exemplo de imagem de arquitetura utilizada na análise</i></p>
+
+---
 
 # STRIDE Analyzer API
 
