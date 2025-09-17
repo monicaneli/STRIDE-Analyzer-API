@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STRIDE Analyzer Frontend</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.26.0/cytoscape.min.css" />
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        #cy { width: 100%; height: 500px; border: 1px solid #ccc; margin-top: 30px; }
+        .form-section { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 5px; }
+        input, textarea, select { width: 100%; margin-bottom: 10px; padding: 8px; }
+        button { padding: 10px 20px; }
+    </style>
+</head>
+<body>
+    <h1>STRIDE Analyzer API</h1>
+    <p>API desenvolvida com Python, FastAPI e Azure OpenAI que aplica técnicas de prompt engineering para analisar arquiteturas de sistemas a partir de imagens. Utiliza a metodologia STRIDE para identificar ameaças de segurança automaticamente, apoiando equipes na avaliação de riscos e proteção de aplicações.</p>
+    <p><b>Faça o upload de uma imagem da arquitetura do sistema e preencha os detalhes da aplicação para iniciar a análise.</b></p>
+    <form id="threatForm" enctype="multipart/form-data">
+        <div class="form-section">
+            <label for="imagem">Imagem de Arquitetura:</label>
+            <input type="file" id="imagem" name="imagem" accept="image/png, image/jpeg" required />
+        </div>
+        <div class="form-section">
+            <label for="tipo_aplicacao">Tipo de Aplicação:</label>
+            <input type="text" id="tipo_aplicacao" name="tipo_aplicacao" placeholder="Exemplo: Web " required />
+        </div>
+        <div class="form-section">
+            <label for="autenticacao">Métodos de Autenticação:</label>
+            <input type="text" id="autenticacao" name="autenticacao" placeholder="Exemplo: Entra ID" required />
+        </div>
+        <div class="form-section">
+            <label for="acesso_internet">Exposta na Internet:</label>
+            <select id="acesso_internet" name="acesso_internet" required>
+                <option value="Sim">Sim</option>
+                <option value="Não">Não</option>
+            </select>
+        </div>
+        <div class="form-section">
+            <label for="dados_sensiveis">Dados Sensíveis:</label>
+            <select id="dados_sensiveis" name="dados_sensiveis" required>
+                <option value="Sim">Sim</option>
+                <option value="Não">Não</option>
+            </select>
+        </div>
+        <div class="form-section">
+            <label for="descricao_aplicacao">Descrição da Aplicação:</label>
+            <textarea id="descricao_aplicacao" name="descricao_aplicacao" rows="4" placeholder="Uma aplicação que..." required></textarea>
+        </div>
+        <button type="submit">Analisar Ameaças</button>
+    </form>
+    <h3>Resultado da Análise:</h3>
+    <div id="result" style="margin-top:30px;"></div>
+    <div id="cy"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.26.0/cytoscape.min.js"></script>
+    <script>
+        document.getElementById('threatForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            document.getElementById('result').innerHTML = 'Processando...';
+            try {
+                const response = await fetch('http://127.0.0.1:8000/analisar_ameacas', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                // Exibe a resposta bruta da API para debug
+                document.getElementById('result').innerHTML = '<b>Resposta bruta da API:</b><br><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+
+                // Tenta extrair o threat_model e improvement_suggestions do campo message.content
+                try {
+                    const content = data.choices?.[0]?.message?.content;
+                    if (content) {
+                        const parsed = JSON.parse(content);
+                        document.getElementById('result').innerHTML += '<b>Modelo de Ameaças:</b><br><pre>' + JSON.stringify(parsed.threat_model, null, 2) + '</pre>' +
+                            '<b>Sugestões de Melhoria:</b><br><pre>' + JSON.stringify(parsed.improvement_suggestions, null, 2) + '</pre>';
+                        renderCytoscape(parsed.threat_model);
+                    }
+                } catch (e) {
+                    document.getElementById('result').innerHTML += '<br><b>Erro ao processar threat_model:</b> ' + e;
+                }
+            } catch (err) {
+                document.getElementById('result').innerHTML = '<b>Erro ao conectar à API:</b> ' + err;
+            }
+        });
+
+        function renderCytoscape(threatModel) {
+            if (!Array.isArray(threatModel)) return;
+            const nodes = [];
+            const edges = [];
+            threatModel.forEach((threat, idx) => {
+                nodes.push({ data: { id: 't' + idx, label: threat["Threat Type"] } });
+                nodes.push({ data: { id: 's' + idx, label: threat["Scenario"] } });
+                nodes.push({ data: { id: 'i' + idx, label: threat["Potential Impact"] } });
+                edges.push({ data: { source: 't' + idx, target: 's' + idx, label: 'Cenário' } });
+                edges.push({ data: { source: 's' + idx, target: 'i' + idx, label: 'Impacto' } });
+            });
+            const cy = cytoscape({
+                container: document.getElementById('cy'),
+                elements: { nodes, edges },
+                style: [
+                    { selector: 'node', style: { 'label': 'data(label)', 'text-valign': 'center', 'color': '#222', 'background-color': '#aad8ff', 'border-width': 2, 'border-color': '#333' } },
+                    { selector: 'edge', style: { 'width': 2, 'line-color': '#888', 'target-arrow-color': '#888', 'target-arrow-shape': 'triangle', 'curve-style': 'bezier', 'label': 'data(label)', 'font-size': 10, 'color': '#555' } }
+                ],
+                layout: { name: 'cose', animate: true }
+            });
+        }
+    </script>
+</body>
+</html>
